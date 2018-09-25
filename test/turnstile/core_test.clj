@@ -21,11 +21,11 @@
 
     (add-timed-item turnstile req-id now-ms)
 
-    (is (= req-id (first (car/wcar test-pool test-conn
+    (is (= req-id (first (car/wcar {:pool test-pool :spec test-conn}
                            (car/zrange "test-turnstile" 0 1))))
         "item is added to turnstile")
 
-    (is (= now-ms (read-string (car/wcar test-pool test-conn
+    (is (= now-ms (read-string (car/wcar {:pool test-pool :spec test-conn}
                                  (car/zscore "test-turnstile" req-id))))
         "item time is set correctly.")
 
@@ -56,11 +56,11 @@
 
     (add-timed-item turnstile req-id (+ 1 now-ms))
     (add-timed-item turnstile (make-token) (+ 2 now-ms))
-    (is (= 2 (car/wcar test-pool test-conn (car/zcard "test-turnstile")))
+    (is (= 2 (car/wcar {:pool test-pool :spec test-conn} (car/zcard "test-turnstile")))
         "multiple items added.")
 
     (reset turnstile)
-    (is (= 0 (car/wcar test-pool test-conn (car/zcard "test-turnstile")))
+    (is (= 0 (car/wcar {:pool test-pool :spec test-conn} (car/zcard "test-turnstile")))
         "reset clears all items")
 
     (is (has-space? turnstile 10)
