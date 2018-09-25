@@ -1,4 +1,4 @@
-(defproject threatgrid/turnstile "0.102-SNAPSHOT"
+(defproject threatgrid/turnstile "0.102"
   :description "A distributed rate-limiting service on top of Redis."
   :url "http://github.com/craigbro/turnstile"
   :license {:name "Eclipse Public License"
