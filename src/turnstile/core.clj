@@ -13,14 +13,14 @@
 (defrecord RedisTurnstile [conn-spec pool name expiration-ms]
   Turnstile
   (expire-entries [this now-ms]
-    (car/wcar pool conn-spec
+    (car/wcar {:pool pool :spec conn-spec} conn-spec
       ;; remove all entries whose score is more them expiration-ms + 1 old (relative to now-ms)
       (car/zremrangebyscore name 0 (- now-ms expiration-ms 1)))
     this)
   (space [this limit]
     (- limit (car/wcar {:pool pool :spec conn-spec} (car/zcard name))))
   (has-space? [this limit]
-    (<  (car/wcar pool conn-spec
+    (<  (car/wcar {:pool pool :spec conn-spec}
           (car/zcard name)) limit))
   (next-slot [this limit now-ms]
     (if-let [earliest (first (car/wcar {:pool pool :spec conn-spec} (car/zrange name 0 1)))]

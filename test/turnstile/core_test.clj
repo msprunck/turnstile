@@ -4,7 +4,8 @@
             [turnstile.core :refer :all]))
 
 (def test-pool {})
-(def test-conn {})
+(def test-conn {:host "localhost"
+                :port 6380})
 
 (defn make-token []
   (str (java.util.UUID/randomUUID)))
